@@ -1,0 +1,100 @@
+// User Login Form Validation
+document.querySelector('#loginForm').addEventListener('submit', function (e) {
+    e.preventDefault(); // Prevent form submission
+
+    const username = document.querySelector('#loginUsername').value.trim();
+    const password = document.querySelector('#loginPassword').value.trim();
+
+    if (!username || !password) {
+        showAlert('All fields are required!', 'danger');
+        return;
+    }
+
+    if (password.length < 6) {
+        showAlert('Password must be at least 6 characters long.', 'danger');
+        return;
+    }
+
+    showAlert('Login successful!', 'success');
+    // Proceed with login logic
+});
+
+// User Registration Form Validation
+document.querySelector('#registrationForm').addEventListener('submit', function (e) {
+    e.preventDefault(); // Prevent form submission
+
+    const name = document.querySelector('#regName').value.trim();
+    const email = document.querySelector('#regEmail').value.trim();
+    const phone = document.querySelector('#regPhone').value.trim();
+    const role = document.querySelector('#regRole').value;
+
+    if (!name || !email || !phone || !role) {
+        showAlert('All fields are required!', 'danger');
+        return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^\d{10}$/;
+
+    if (!emailRegex.test(email)) {
+        showAlert('Invalid email format.', 'danger');
+        return;
+    }
+
+    if (!phoneRegex.test(phone)) {
+        showAlert('Phone number must be 10 digits.', 'danger');
+        return;
+    }
+
+    showAlert('Registration successful!', 'success');
+    // Add logic to register the user
+});
+
+// Toggle Password Visibility
+document.querySelectorAll('.toggle-password').forEach(function (toggle) {
+    toggle.addEventListener('click', function () {
+        const input = document.querySelector(this.dataset.target);
+        const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+        input.setAttribute('type', type);
+        this.classList.toggle('fa-eye');
+        this.classList.toggle('fa-eye-slash');
+    });
+});
+
+// Show User Details in Modal
+document.querySelectorAll('.viewDetailsButton').forEach(function (button) {
+    button.addEventListener('click', function () {
+        const userId = this.dataset.userId;
+        // Simulate fetching user details
+        const userDetails = {
+            name: 'John Doe',
+            email: 'john.doe@example.com',
+            phone: '1234567890',
+            role: 'Admin',
+        };
+
+        // Populate modal with user details
+        document.querySelector('#userModal .modal-title').textContent = `Details for ${userDetails.name}`;
+        document.querySelector('#userModal .modal-body').innerHTML = `
+            <p><strong>Email:</strong> ${userDetails.email}</p>
+            <p><strong>Phone:</strong> ${userDetails.phone}</p>
+            <p><strong>Role:</strong> ${userDetails.role}</p>
+        `;
+
+        // Show the modal
+        const userModal = new bootstrap.Modal(document.querySelector('#userModal'));
+        userModal.show();
+    });
+});
+
+// Utility Function: Show Alert Messages
+function showAlert(message, type) {
+    const alertContainer = document.querySelector('#alertContainer');
+    const alertHTML = `
+        <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    `;
+    alertContainer.innerHTML = alertHTML;
+}
